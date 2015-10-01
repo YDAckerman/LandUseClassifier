@@ -53,7 +53,9 @@ class LeNetConvPoolLayer(object):
         W_bound = np.sqrt(6. / (fan_in + fan_out))
         self.W = theano.shared(
             np.asarray(
-                rng.uniform(low=-W_bound, high=W_bound, size=filter_shape),
+                rng.uniform(low=-.05, # W_bound instead of .05
+                            high=.05, # W_bound instead of .05
+                            size=filter_shape),
                 dtype=theano.config.floatX
             ),
             borrow=True

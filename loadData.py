@@ -5,7 +5,7 @@ from scipy import io as sio
 import theano
 import theano.tensor as T
 
-def load_data(train_prop = .8, valid_prop = .2):
+def load_data():
 
     #############
     # LOAD DATA #
@@ -34,35 +34,24 @@ def load_data(train_prop = .8, valid_prop = .2):
     vals = np.array(vals)
     targs = np.array(targs)
 
-    train_vals = []
-    test_vals = []
-    valid_vals = []
-    train_targs = []
-    test_targs = []
-    valid_targs = []
+    train_vals, test_vals, valid_vals, train_targs, test_targs, valid_targs = [], [], [], [], [], []
+
 
     for t in np.unique(targs):
+        
         i = np.where(targs == t)[0]
-        i_train = sample(i, 20) #int(train_prop * len(i)))
-        i_test = sample(i, 20) #np.setdiff1d(i, i_train)
-        i_valid = sample(i, 20) #sample(i_train, int(valid_prop * len(i_train)))
-        #i_train = np.setdiff1d(i_train, i_valid)
-
-        train_vals.append(vals[i_train])
-        test_vals.append(vals[i_test])
-        valid_vals.append(vals[i_valid])
-
-        train_targs.append(targs[i_train])
-        test_targs.append(targs[i_test])
-        valid_targs.append(targs[i_valid])
-
-    train_vals = np.concatenate(train_vals, axis = 0)
-    test_vals = np.concatenate(test_vals, axis = 0)
-    valid_vals = np.concatenate(valid_vals, axis = 0)
-
-    train_targs = np.concatenate(train_targs, axis = 0)
-    test_targs = np.concatenate(test_targs, axis = 0)
-    valid_targs = np.concatenate(valid_targs, axis = 0)
+        i_train = sample(i, 400) #int(.2 * len(i)))
+        i = np.setdiff1d(i, i_train)
+        i_valid = sample(i, 200) #int(.2 * len(i)))
+        i_test = np.setdiff1d(i, i_valid)
+        
+        train_vals = train_vals + [vals[j] for j in i_train]
+        test_vals = test_vals + [vals[j] for j in i_test]
+        valid_vals = valid_vals + [vals[j] for j in i_valid]
+        
+        train_targs = train_targs + [targs[j] for j in i_train]
+        test_targs = test_targs + [targs[j] for j in i_test]
+        valid_targs = valid_targs + [targs[j] for j in i_valid]
     
     train_set = (train_vals, train_targs)
     valid_set = (valid_vals, valid_targs)

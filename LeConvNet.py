@@ -68,7 +68,7 @@ class LeNet(object):
 
         """
 
-        # hypothetical hyper-parameters (will optimize later):
+        # hypothetical hyper-parameters (will optimize later?):
         n1 = 204
         k2 = 4
 
@@ -141,7 +141,7 @@ class LeNet(object):
         self.y_pred = self.layer2.y_pred
 
 
-def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=1000,
+def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=90,
                batch_size=20, nkerns=[20, 50], n_hidden=100):
     
     """
@@ -298,7 +298,7 @@ def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=1000,
                   # batches
             
             cost_ij = train_model(minibatch_index)
-                  # calculate cost with this minibatch
+            # calculate cost with this minibatch
 
             if (iter + 1) % validation_frequency == 0:
                   # If we've covered enough iterations to give validation
@@ -316,7 +316,7 @@ def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=1000,
                 if this_validation_loss < best_validation_loss:
 
                     #improve patience if loss improvement is good enough
-                    #join logical lines with \
+                    #join lines with \
                     if this_validation_loss < best_validation_loss *  \
                        improvement_threshold:
                         patience = max(patience, iter * patience_increase)
@@ -330,6 +330,7 @@ def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=1000,
                         test_model(i)
                         for i in xrange(n_test_batches)
                     ]
+                    
                     test_score = np.mean(test_losses)
                     print(('     epoch %i, minibatch %i/%i, test error of '
                            'best model %f %%') %
@@ -351,4 +352,4 @@ def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=1000,
                           ' ran for %.2fm' % ((end_time - start_time) / 60.))
 
 if __name__ == '__main__':
-    train_LeNet(n_epochs = 2)
+    train_LeNet(n_epochs = 20)

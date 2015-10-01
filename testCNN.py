@@ -144,7 +144,7 @@ updates = [
 
 train_model = theano.function(
     [index],
-    cost,
+    params,
     updates = updates,
     givens = {
         x: train_set_x[index * batch_size: (index + 1) * batch_size],
@@ -165,5 +165,8 @@ predict = theano.function(
 # the classes 0-15, but they were labeled 1-16...)
 tmp = theano.function([index], outputs = train_set_y[index * 20: (index+1) * 20])
 
-cost_ij = train_model(15)
+cost_a = np.mean(np.concatenate(train_model(15)[0], axis = 0))
+cost_b = np.mean(np.concatenate(train_model(40)[0], axis = 0))
+
+
 preds = predict(1)
