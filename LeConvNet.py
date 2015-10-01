@@ -174,9 +174,9 @@ def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=90,
     :type n_hidden: int
     :param n_hidden: sets the number of perceptrons in the hidden layer
     """
-    rng = np.random.RandomState(23455)
+    rng = np.random.RandomState(54302)
                   
-    datasets = load_data() ## you will need to write this function
+    datasets = load_data(rng) ## you will need to write this function
 
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
@@ -352,4 +352,4 @@ def train_LeNet(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=90,
                           ' ran for %.2fm' % ((end_time - start_time) / 60.))
 
 if __name__ == '__main__':
-    train_LeNet(n_epochs = 20)
+    train_LeNet(n_epochs = 25)

@@ -1,20 +1,20 @@
 import os
 import numpy as np
-from random import sample
+# from random import sample, shuffle
 from scipy import io as sio
 import theano
 import theano.tensor as T
 
-def load_data():
+def load_data(rng):
 
     #############
     # LOAD DATA #
     #############
     
-    os.chdir('/Users/Yoni')
+    os.chdir(os.path.expanduser("~"))
     
-    raw = sio.loadmat("Documents/ZhangLab/LandUseClass/Data/Salinas_corrected.mat")
-    gt = sio.loadmat("Documents/ZhangLab/LandUseClass/Data/Salinas_gt.mat")
+    raw = sio.loadmat("Documents/ZhangLab/Python/LandUseClassifier/Data/Salinas_corrected.mat")
+    gt = sio.loadmat("Documents/ZhangLab/Python/LandUseClassifier/Data/Salinas_gt.mat")
 
     raw = raw['salinas_corrected']
     gt = gt['salinas_gt']
@@ -34,24 +34,42 @@ def load_data():
     vals = np.array(vals)
     targs = np.array(targs)
 
-    train_vals, test_vals, valid_vals, train_targs, test_targs, valid_targs = [], [], [], [], [], []
+    train_vals, test_vals, valid_vals = [], [], []
+    train_targs, test_targs, valid_targs = [], [], []
 
 
     for t in np.unique(targs):
-        
         i = np.where(targs == t)[0]
-        i_train = sample(i, 400) #int(.2 * len(i)))
+        i_train = rng.choice(i, 400) #int(.2 * len(i)))
         i = np.setdiff1d(i, i_train)
-        i_valid = sample(i, 200) #int(.2 * len(i)))
+        i_valid = rng.choice(i, 200) #int(.2 * len(i)))
         i_test = np.setdiff1d(i, i_valid)
-        
         train_vals = train_vals + [vals[j] for j in i_train]
         test_vals = test_vals + [vals[j] for j in i_test]
         valid_vals = valid_vals + [vals[j] for j in i_valid]
-        
         train_targs = train_targs + [targs[j] for j in i_train]
         test_targs = test_targs + [targs[j] for j in i_test]
         valid_targs = valid_targs + [targs[j] for j in i_valid]
+
+    # for some reason I'm concerned that having it ordered as it is will cause
+    # problems... let's shuffle it all up
+
+    i_train = range(len(train_targs))
+    i_valid = range(len(valid_targs))
+    i_test = range(len(test_targs))
+
+    rng.shuffle(i_train)
+    rng.shuffle(i_valid)
+    rng.shuffle(i_test)
+    
+    train_vals = [train_vals[i] for i in i_train]
+    train_targs = [train_targs[i] for i in i_train]
+
+    valid_vals = [valid_vals[i] for i in i_valid]
+    valid_targs = [valid_targs[i] for i in i_valid]
+
+    test_vals = [test_vals[i] for i in i_test]
+    test_targs = [test_targs[i] for i in i_test]
     
     train_set = (train_vals, train_targs)
     valid_set = (valid_vals, valid_targs)
