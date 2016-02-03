@@ -16,7 +16,7 @@ n4 : number of nodes in the fully connected layer between the max
 n5 : number of output nodes (number of classes)
 the paper recommends these guidelines:
 k1 = n1 / 12 (the paper says to use denom of 9, which they don't explain)
-n3 = n2 / k2 (not the way the paper states it, but they do it badly.)
+n3 = n2 / k2 (not the way the paper states it)
 n3 \in [30, 40]
 n4 = 100
 "These choices might not be the best but are effective for general HSI data"
